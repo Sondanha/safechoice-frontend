@@ -24,3 +24,15 @@ export interface EventResponse {
   step?: Step;
   ended: boolean;
 }
+
+export interface Report {
+  session_id: string;
+  score: number;
+  feature: {
+    response_time_sec: number;
+    max_step_reached: number;
+    trigger_hits: Record<string, number>;
+    verification_attempt: number;
+  };
+  summary: string;
+}

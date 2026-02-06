@@ -1,212 +1,217 @@
 # SAFECHOICE Frontend
 
-피싱·스캠 대응 **행동 선택 기반 교육 시뮬레이션 서비스** SAFECHOICE의 프론트엔드 레포지토리다.
+SAFECHOICE는 피싱·스캠을 **탐지하거나 차단하는 서비스가 아니라**,
+**사용자의 실제 판단과 행동을 시뮬레이션하고 교육으로 환류하는 체험형 서비스**다.
 
-백엔드(FastAPI)는 이미
-
-- 세션 생성
-- step 기반 시나리오 엔진
-- 이벤트 수집(`/events`)
-- 분석/리포트(`/reports/{session_id}`)
-
-까지 구현되어 있고,
-
-프론트는 다음을 담당한다.
-
-- 시뮬레이션 UI 렌더
-- 사용자 행동 이벤트 전송
-- 시뮬레이션 종료 후 결과 리포트 시각화
+이 레포지토리는 SAFECHOICE 서비스의 **UI, 사용자 흐름, 관리자 화면을 담당하는 프론트엔드**이다.
 
 ---
 
-## 1. 프로젝트 목표 (MVP)
+## 1. 프론트엔드의 역할 요약
 
-### MVP 사용자 흐름
+프론트는 “똑똑해질” 필요가 없다.
+**백엔드가 만든 엔진을 사람이 이해할 수 있게 보여주는 게 전부다.**
 
-1. 시뮬레이션 시작
-2. step 메시지 확인
-3. 옵션 클릭 → 이벤트 전송
-4. 다음 step 렌더 반복
-5. 종료 시 리포트 화면 이동
-6. 분석 결과 확인
+프론트의 책임은 다음과 같다.
 
-### 프론트 MVP 범위
-
-- `POST /sessions/`로 세션 시작 + 첫 step 수신
-- `POST /events/`로 이벤트 전송 + 다음 step 수신
-- `GET /reports/{session_id}`로 리포트 조회
-- UI는 “설명 가능한 단순함” 우선 (과한 디자인/복잡한 상태관리 금지)
+- 시뮬레이션 흐름을 UI로 표현
+- 사용자 행동을 이벤트로 백엔드에 전달
+- 백엔드 분석 결과를 “교육용 리포트”로 시각화
+- 사용자 / 관리자 **역할 분리된 화면 제공**
+- AI Agent·자동화 개념을 **UI로 설득**
 
 ---
 
-## 2. 기술 스택
+## 2. 서비스 구조 개요 (중요)
 
-- Next.js (App Router)
-- React + TypeScript
-- fetch 기반 API 호출
-- 환경변수 기반 API Base URL 관리
+SAFECHOICE는 **역할 기반 서비스**다.
+실제 로그인 시스템은 없고, **역할(role)을 기준으로 화면만 분리**한다.
+
+### 역할 종류
+
+- **User**
+  - 시뮬레이션 참여
+  - 개인 리포트 확인
+
+- **Admin**
+  - 시나리오 목록 확인
+  - 사용자 행동 분석 요약 확인
+  - AI Agent 규칙 설정 화면 확인 (UI 중심)
+
+> ⚠️ 실제 인증 / 권한 / 보안은 구현하지 않는다.
+> localStorage 기반 role 분기만 사용한다.
 
 ---
 
-## 3. 로컬 실행 방법
+## 3. 사용자(User) 흐름
 
-### 3.1 환경 변수
+1. 사용자로 로그인 (체험)
+2. 시뮬레이션 시작
+3. 메시지 수신 (step)
+4. 선택지 클릭 → 이벤트 전송
+5. step 전환 반복
+6. 종료 시 리포트 화면 이동
+7. 개인 행동 분석 결과 확인
 
-프로젝트 루트에 `.env.local` 생성:
+👉 **프론트는 시나리오를 해석하지 않는다.**
+step 구조 그대로 렌더만 한다.
 
-```env
-NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000
+---
+
+## 4. 관리자(Admin) 흐름
+
+관리자 화면은 **실제 운영 기능이 아니라 기획·확장성 표현용 UI**다.
+
+관리자가 할 수 있는 것처럼 “보여줘야” 하는 기능:
+
+- 시나리오 목록 확인
+- 시나리오별 특성(triggers) 확인
+- 사용자 취약성 분석 요약 확인
+- 분석 규칙 / AI Agent 설정 화면 확인
+
+> ⚠️ 관리자 화면은 “작동”보다 “설득”이 목적이다.
+
+---
+
+## 5. 백엔드 구조 이해 (프론트 필독)
+
+### 시나리오 (Scenario)
+
+- 백엔드에는 **여러 시나리오**가 존재
+- 시나리오는 `scenario_id`로 식별됨
+- 프론트는 시나리오 **내용을 수정하지 않음**
+- 관리자 화면에서는 “선택/목록”만 다룸
+
+### Step 구조
+
+```json
+{
+  "id": "step_1",
+  "message": {
+    "sender": "unknown",
+    "text": "급한 연락입니다."
+  },
+  "options": [
+    { "id": "reply", "label": "응답" },
+    { "id": "ignore", "label": "무시" }
+  ]
+}
 ```
 
-### 3.2 실행
-
-```bash
-npm install
-npm run dev
-```
-
-- FE: `http://localhost:3000`
-- BE Swagger: `http://127.0.0.1:8000/docs`
+- `message`는 **string이 아니라 객체**
+- sender 기준으로 UI 정렬
+- options는 그대로 버튼으로 렌더
 
 ---
 
-## 4. 디렉토리 구조
+## 6. 백엔드 API 연동 요약
+
+### 세션 생성
+
+```
+POST /sessions
+```
+
+- 시뮬레이션 시작
+- 첫 step 반환
+- `scenario_id`는 optional
+
+---
+
+### 이벤트 전송
+
+```
+POST /events
+```
+
+프론트가 보내는 것:
+
+- session_id
+- current_step_id
+- option_id
+- step_index
+- trigger (optional)
+- verification (optional)
+
+백엔드가 반환하는 것:
+
+- 다음 step
+- 또는 `{ ended: true }`
+
+---
+
+### 리포트 조회
+
+```
+GET /reports/{session_id}
+```
+
+- 점수
+- 취약 트리거
+- 요약 피드백 텍스트
+
+프론트는 **가공 최소화**, 그대로 보여주는 게 원칙이다.
+
+---
+
+## 7. 화면 구조 (App Router 기준)
 
 ```text
-safechoice-frontend/
- ├─ app/
- │  ├─ page.tsx                 # / → /simulate 리다이렉트
- │  ├─ simulate/
- │  │  └─ page.tsx              # 시뮬레이션 실행 화면
- │  └─ report/
- │     └─ [sessionId]/
- │        └─ page.tsx           # 결과 리포트 화면
- │
- ├─ features/
- │  ├─ session/
- │  │  └─ api.ts                # POST /sessions/
- │  └─ simulation/
- │     └─ api.ts                # POST /events/
- │
- └─ shared/
-    ├─ api/
-    │  └─ client.ts             # fetch wrapper (BASE_URL)
-    └─ types/
-       └─ domain.ts             # Step / Session / Event / Report 타입
+/
+├─ login/                # 로그인 선택 (User / Admin)
+├─ user/
+│  ├─ page.tsx           # 사용자 대시보드
+│  ├─ simulate/          # 시뮬레이션 UI (카톡형)
+│  └─ report/[sessionId] # 개인 리포트
+└─ admin/
+   ├─ page.tsx           # 관리자 대시보드
+   ├─ scenarios/         # 시나리오 목록
+   ├─ analytics/         # 취약성 요약
+   └─ agent/             # AI Agent 설정 UI
 ```
-
-원칙:
-
-- `app/`는 라우팅과 화면만
-- API 호출/도메인 로직은 `features/`, 공용은 `shared/`
 
 ---
 
-## 5. 백엔드 API 계약 (FE 기준)
+## 8. 프론트 개발 원칙 (중요)
 
-### 5.1 Health
+- 비즈니스 판단 ❌
+- 분석 로직 ❌
+- 시나리오 생성 ❌
 
-- `GET /health`
+프론트는:
 
-### 5.2 세션 생성
+- 흐름을 보여주고
+- 선택을 전달하고
+- 결과를 설명한다
 
-- `POST /sessions/`
-- 응답: `session_id` + `step`
-
-예시(형태만):
-
-```json
-{
-  "session_id": "uuid",
-  "step": {
-    "id": "step_1",
-    "message": { "sender": "bank", "text": "..." },
-    "options": [
-      { "id": "ignore", "label": "무시" },
-      { "id": "reply", "label": "응답" }
-    ]
-  }
-}
-```
-
-### 5.3 이벤트 전송
-
-- `POST /events/`
-- 요청 payload 핵심:
-
-```json
-{
-  "session_id": "uuid",
-  "type": "click",
-  "payload": {
-    "current_step_id": "step_1",
-    "option_id": "ignore",
-    "step_index": 1,
-    "trigger": "urgency",
-    "verification": false
-  },
-  "timestamp": "2026-02-05T12:00:00"
-}
-```
-
-- 응답:
-  - 진행 중: `{ step: {...}, ended: false }` 형태 또는 `{ step: {...} }` (백엔드 구현에 따름)
-  - 종료: `{ ended: true }`
-
-### 5.4 리포트 조회
-
-- `GET /reports/{session_id}`
-- 리포트 형태는 백엔드 도메인에 맞춰 FE에서 표시
+“똑똑한 척” 하지 말고
+**“설득력 있게 보이게” 만드는 게 목표다.**
 
 ---
 
-## 6. 현재 구현 상태 (작성 시점)
+## 9. 현재 프론트 상태
 
 ### 완료
 
-- [x] Next.js 프로젝트 세팅
-- [x] `.env.local` 기반 BASE_URL 적용
-- [x] `/simulate` 라우팅 구성
-- [x] `POST /sessions/` 연동 (세션 생성 + 첫 step 렌더)
-- [x] 버튼 클릭 이벤트 동작 확인
-- [x] `POST /events/` 연동 확인 (Network에서 요청 확인됨)
-- [x] 백엔드 응답 step 구조를 FE 계약(`id`, `message`, `options[]`)에 맞게 통일
+- 시뮬레이션 기본 플로우 연동
+- 이벤트 전송
+- 리포트 화면 렌더
+- 백엔드 계약 검증 완료
 
-### 이슈/메모
+### 다음 작업
 
-- `step.message`는 문자열이 아니라 객체 `{ sender, text }` 형태일 수 있음
-  → 렌더 시 `step.message.text`로 표시해야 함 (객체 그대로 렌더하면 React 에러남)
-
-### 남음 (다음 작업)
-
-- [ ] 시뮬레이션 UI 정리 (StepCard/OptionButton 같은 최소 컴포넌트 분리)
-- [ ] step 전환 루프 안정화 (ended 처리, stepIndex 증가, 예외 처리)
-- [ ] 종료 시 `/report/{sessionId}` 이동
-- [ ] `GET /reports/{sessionId}` 연동
-- [ ] 리포트 화면 시각화(점수/취약 트리거/피드백 텍스트)
-- [ ] 로딩/에러 UX 최소화
+- 로그인 / 역할 선택 화면
+- 카카오톡 스타일 시뮬레이션 UI
+- User / Admin 대시보드
+- 관리자 시나리오 목록 연동
+- AI Agent 설정 UI (비기능)
 
 ---
 
-## 7. 트러블슈팅
+## 10. 한 줄 요약
 
-### 7.1 CORS
+SAFECHOICE 프론트엔드는
+**“AI 서비스처럼 보이게 만드는 연출 레이어”**다.
 
-- 브라우저에서 BE 호출 실패 시, BE에 CORS 설정 필요
-- BE allow_origins: `http://localhost:3000`
-
-### 7.2 `/events`가 Network에 안 뜸
-
-- onClick 자체가 안 먹는 케이스와 구분해야 함
-- 임시로 `handleClick`에 console.log 찍어서 호출 여부 확인
-- 최악이면 페이지에서 직접 fetch로 우회해 “도달 여부”부터 확인
-
-### 7.3 400 Bad Request
-
-- 보통 `current_step_id` 또는 `option_id` 누락
-- `/sessions/` 응답 step 구조가 FE 타입과 일치하는지 확인
-
-### 7.4 React “Objects are not valid as a React child”
-
-- `step.message`가 객체일 때 발생
-- `step.message.text`로 렌더
+지금 단계에서 중요한 건
+기능 완성도가 아니라 **이해 가능성**이다.
