@@ -3,6 +3,9 @@ import { AdminSettings, ChatMessage } from '../../../shared/types/domain';
 
 export const POST = async (req: Request) => {
     try {
+        if (!process.env.OPENAI_API_KEY) {
+            return NextResponse.json({ error: 'OpenAI API Key가 설정되지 않았습니다. .env.local 파일을 확인해 주세요.' }, { status: 500 });
+        }
         const { messages, settings }: { messages: ChatMessage[]; settings: AdminSettings } = await req.json();
 
         const systemPrompt = `

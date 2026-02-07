@@ -39,8 +39,25 @@ export default function AdminPage() {
         setActiveTab('SCENARIO'); // 설정 완료 후 상세 설정 탭으로 이동
     };
 
+    const [showToast, setShowToast] = useState(false);
+
+    const handleApplySimulation = () => {
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 3000);
+    };
+
     return (
-        <div className="min-h-screen bg-[#F8FAFC] flex">
+        <div className="min-h-screen bg-[#F8FAFC] flex relative">
+            {/* Success Toast */}
+            {showToast && (
+                <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[300] bg-navy-deep text-white px-8 py-4 rounded-3xl shadow-2xl flex items-center space-x-3 border border-white/10 animate-in slide-in-from-top duration-500">
+                    <div className="w-6 h-6 bg-blue-electric rounded-full flex items-center justify-center">
+                        <Activity className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="font-bold text-sm tracking-tight">AI 시나리오가 실시간 시스템에 성공적으로 반영되었습니다.</span>
+                </div>
+            )}
+
             {/* Sidebar Navigation */}
             <aside className="w-72 bg-white border-r border-slate-200 hidden lg:flex flex-col">
                 <div className="p-8 border-b border-slate-100 mb-6 flex items-center space-x-3">
@@ -52,7 +69,7 @@ export default function AdminPage() {
 
                 <nav className="flex-1 px-4 space-y-2">
                     {[
-                        { id: 'DASHBOARD', icon: <LayoutDashboard className="w-5 h-5" />, label: '통통 대시보드' },
+                        { id: 'DASHBOARD', icon: <LayoutDashboard className="w-5 h-5" />, label: '대시보드' },
                         { id: 'SCENARIO', icon: <FileText className="w-5 h-5" />, label: '시나리오 관리' },
                         { id: 'MONITORING', icon: <Users className="w-5 h-5" />, label: '사용자 진단 현황' }
                     ].map((item) => (
@@ -60,8 +77,8 @@ export default function AdminPage() {
                             key={item.id}
                             onClick={() => setActiveTab(item.id as any)}
                             className={`w-full flex items-center space-x-3 px-4 py-3 rounded-2xl text-sm font-bold transition-all ${activeTab === item.id
-                                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-100'
-                                    : 'text-slate-500 hover:bg-slate-50'
+                                ? 'bg-blue-600 text-white shadow-lg shadow-blue-100'
+                                : 'text-slate-500 hover:bg-slate-50'
                                 }`}
                         >
                             {item.icon}
@@ -244,7 +261,7 @@ export default function AdminPage() {
                             </div>
 
                             <button
-                                onClick={() => router.push('/simulate')}
+                                onClick={handleApplySimulation}
                                 className="w-full py-6 bg-blue-600 text-white font-black rounded-[32px] shadow-2xl shadow-blue-200 hover:bg-blue-700 transition-all active:scale-[0.98]"
                             >
                                 설정값 저장 및 시뮬레이션 적용하기
