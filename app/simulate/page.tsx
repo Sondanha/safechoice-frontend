@@ -85,8 +85,8 @@ export default function SimulatePage() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
                 className={`flex items-center space-x-2 px-6 py-2.5 rounded-2xl text-sm font-bold transition-all ${activeTab === tab.id
-                    ? 'bg-blue-electric text-white shadow-lg shadow-blue-electric/20'
-                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                  ? 'bg-blue-electric text-white shadow-lg shadow-blue-electric/20'
+                  : 'text-slate-400 hover:text-white hover:bg-white/5'
                   }`}
               >
                 {tab.icon}
@@ -217,11 +217,11 @@ export default function SimulatePage() {
                   <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-8">
                     <MessageSquareWarning className="w-10 h-10 text-red-600" />
                   </div>
-                  <h2 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">취약점 노출됨</h2>
+                  <h2 className="text-3xl font-black text-slate-900 mb-4 tracking-tight">위험 행동 임계치 도달</h2>
                   <p className="text-slate-500 font-medium mb-8 leading-relaxed">
-                    민감한 정보가 유출되어 <br />
-                    시뮬레이션이 자동 종료되었습니다. <br />
-                    잠시 후 상세 리포트를 확인하세요.
+                    AI 공격자의 심리적 압박에 의한 <br />
+                    보안 취약 행동이 탐지되었습니다. <br />
+                    잠시 후 정밀 리포트로 이동합니다.
                   </p>
                   <div className="flex justify-center">
                     <div className="w-10 h-10 border-4 border-slate-900 border-t-transparent rounded-full animate-spin"></div>

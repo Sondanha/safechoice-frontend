@@ -35,9 +35,9 @@ export const ScenarioUploader = ({ onAnalysisComplete }: ScenarioUploaderProps) 
         setIsAnalyzing(true);
         setProgress(0);
 
-        // 시나리오 시뮬레이션을 위한 2.5초 지연 및 프로그레스 연출
-        const duration = 2500;
-        const interval = 50;
+        // 시나리오 시뮬레이션을 위한 11초 지연 및 프로그레스 연출
+        const duration = 11000;
+        const interval = 100;
         const steps = duration / interval;
         let currentStep = 0;
 

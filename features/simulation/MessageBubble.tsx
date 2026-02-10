@@ -13,24 +13,22 @@ export const MessageBubble = ({ message }: MessageBubbleProps) => {
     return (
         <div className={`flex w-full mb-4 ${isUser ? 'justify-end' : 'justify-start'}`}>
             {!isUser && (
-                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-2 mt-1 shrink-0 overflow-hidden">
-                    <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                    </svg>
+                <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center mr-2 mt-1 shrink-0 overflow-hidden shadow-sm">
+                    <div className="w-full h-full bg-blue-electric flex items-center justify-center text-white text-[10px] font-black">AI</div>
                 </div>
             )}
 
             <div className={`max-w-[75%] space-y-1`}>
-                {!isUser && <span className="text-[10px] text-gray-500 ml-1">상대방</span>}
+                {!isUser && <span className="text-[10px] font-black text-slate-400 ml-1 uppercase tracking-wider">AI Broker Lee</span>}
                 <div
-                    className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm transition-all ${isUser
-                            ? 'bg-blue-600 text-white rounded-tr-none'
-                            : 'bg-white text-gray-800 border border-gray-100 rounded-tl-none'
+                    className={`px-4 py-3 rounded-2xl text-sm leading-relaxed shadow-sm transition-all duration-300 ${isUser
+                        ? 'bg-blue-600 text-white rounded-tr-none'
+                        : 'bg-white text-slate-800 border border-slate-100 rounded-tl-none'
                         }`}
                 >
                     {message.content}
                 </div>
-                <div className={`text-[9px] text-gray-400 ${isUser ? 'text-right mr-1' : 'text-left ml-1'}`}>
+                <div className={`text-[9px] font-bold text-slate-400 ${isUser ? 'text-right mr-1' : 'text-left ml-1'}`}>
                     {new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </div>
             </div>

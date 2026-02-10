@@ -74,4 +74,12 @@ export const storage = {
         if (typeof window === 'undefined') return null;
         return localStorage.getItem(STORAGE_KEYS.CURRENT_SESSION_ID);
     },
+
+    /**
+     * 모든 로컬 데이터를 초기화합니다. (데모 초기화용)
+     */
+    clearAll: (): void => {
+        if (typeof window === 'undefined') return;
+        localStorage.clear();
+    }
 };

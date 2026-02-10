@@ -7,21 +7,15 @@ export interface DiagnosisScore {
 }
 
 /**
- * 대화 내역을 바탕으로 심리적 취약점을 분석합니다.
+ * 대화 내역을 바탕으로 심리적 취약점을 분석합니다. (데모용 하드코딩)
  */
 export const analyzeVulnerability = (session: SessionData): DiagnosisScore[] => {
-    const { messages, detectedInfos } = session;
-    const totalLength = messages.length;
-
-    // 단순 예시 로직: 탐지된 정보 조각과 대화 길이를 바탕으로 점수 산출
-    const piiCount = detectedInfos.length;
-
     return [
-        { subject: '권위 복종', A: Math.min(20 + piiCount * 15, 100), fullMark: 100 },
-        { subject: '심리적 압박', A: Math.min(10 + totalLength * 5, 100), fullMark: 100 },
-        { subject: '이익 유혹', A: session.settings.category === 'ROMANCE_SCAM' ? 80 : 40, fullMark: 100 },
-        { subject: '신뢰 형성', A: Math.min(30 + totalLength * 3, 100), fullMark: 100 },
-        { subject: '공포 유발', A: session.settings.category === 'VOICE_PHISHING' ? 70 : 30, fullMark: 100 },
+        { subject: '권위 복종', A: 35, fullMark: 100 },
+        { subject: '심리적 압박', A: 60, fullMark: 100 },
+        { subject: '이익 유혹', A: 25, fullMark: 100 },
+        { subject: '신뢰 형성', A: 20, fullMark: 100 },
+        { subject: '공포 유발', A: 80, fullMark: 100 },
     ];
 };
 
