@@ -44,3 +44,24 @@ export interface SessionData {
   detectedInfos: DetectedInfo[];
   isEnded: boolean;
 }
+
+/**
+ * 리포트 인터페이스
+ */
+export interface Report extends SessionData { }
+
+/**
+ * 세션 응답 인터페이스
+ */
+export interface SessionResponse {
+  id: string;
+  data?: SessionData;
+}
+
+/**
+ * 이벤트 응답 인터페이스
+ */
+export interface EventResponse {
+  success: boolean;
+  message?: string;
+}

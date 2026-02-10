@@ -172,8 +172,8 @@ export default function ReportPage({ params }: { params: Promise<{ sessionId: st
                 </div>
                 <div
                   className={`px-6 py-4 rounded-2xl text-sm max-w-2xl leading-relaxed ${msg.role === 'user'
-                      ? 'bg-blue-50 text-blue-900 rounded-tr-none border border-blue-100'
-                      : 'bg-gray-50 text-gray-800 rounded-tl-none border border-gray-100'
+                    ? 'bg-blue-50 text-blue-900 rounded-tr-none border border-blue-100'
+                    : 'bg-gray-50 text-gray-800 rounded-tl-none border border-gray-100'
                     }`}
                   dangerouslySetInnerHTML={{
                     __html: msg.role === 'user'

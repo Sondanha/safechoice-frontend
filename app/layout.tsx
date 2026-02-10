@@ -1,6 +1,12 @@
 // app/layout.tsx
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "Phishing Insight",
+  description: "Protecting users from phishing attacks",
+};
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
