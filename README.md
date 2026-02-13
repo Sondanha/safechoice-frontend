@@ -1,92 +1,119 @@
-# 🛡️ Phishing Insight: AI 기반 체험형 피싱 대응력 진단 솔루션
+# Phishing Insight
+### AI 기반 실전형 피싱 시뮬레이션 및 행동 진단 플랫폼
 
-> **"나는 당하지 않는다"는 과신을 깨고, 실전 대화로 방어 기제를 형성합니다.**
-> 실제 사건 보고서를 학습한 AI 가해자와의 1:1 시뮬레이션을 통해 개인의 심리적 취약점을 정밀 진단하고 맞춤형 대응 가이드를 제공하는 차세대 예방 교육 플랫폼입니다.
+[![Simulation Demo](demo/1.gif)](https://youtu.be/GVYhEuwNFKo?si=2JQ7XJ3UanHRDqNZ)
 
----
+>Phishing Insight는 실제 보이스피싱 피해 사례를 기반으로 AI가 범죄자를 모사하고 사용자의 대응 행동을 분석하는 **행동 중심 예방 교육 서비스**입니다.
 
-## 🌟 Key Features
-
-### 1. 사건 보고서 기반 AI 페르소나 주입 (Admin)
-
-* **Case-to-Persona**: 관리자가 실제 범죄 사례(PDF/텍스트)를 업로드하면, AI가 가해자의 말투, 회유 수법, 요구 사항을 분석하여 시뮬레이션 환경에 즉시 반영합니다.
-* **실전적 시나리오**: 정형화된 시나리오가 아닌, 사용자의 답변에 따라 실시간으로 변하는 지능형 공격 로직을 제공합니다.
-
-### 2. 적응형 피싱 시뮬레이션 (Simulation)
-
-* **실시간 개인정보 탐지**: 대화 중 주소, 계좌번호, 전화번호 등 민감 정보가 유출되는 시점을 즉각 감지합니다.
-* **반응형 대화 엔진**: LLM(GPT-4o)을 활용하여 사용자의 의심이나 반박에도 유연하게 대처하며 범죄 상황을 재현합니다.
-
-### 3. 정밀 진단 리포트 (Diagnosis)
-
-* **취약점 시각화**: 권위 복종, 심리적 압박, 이익 유혹 등 5가지 지표를 바탕으로 사용자의 심리적 취약도를 방사형 차트로 시각화합니다.
-* **복기(Review) 시스템**: 대화 내역 중 실제 정보 유출이 발생한 지점을 하이라이트하여 개인별 주의 사항을 피드백합니다.
+<br>
 
 ---
 
-## 🛠 Tech Stack
+## 🚨 Problem
 
-### Frontend
+- 피싱은 정보 부족이 아니라 **심리적 압박 상황에서의 행동 실패 문제**
+- 정적 교육 방식은 실제 범죄의 단계적 압박 구조를 재현하지 못함
+- 최신 수법 변화에 대응하기 어려운 기존 콘텐츠 구조
 
-* **Framework**: Next.js 15+ (App Router)
-* **Language**: TypeScript
-* **Styling**: Tailwind CSS 4 (Mobile-First Responsive Design)
-* **Visualization**: Recharts (Radar/Bar Charts)
-
-### AI & Data
-
-* **Engine**: OpenAI GPT-4o API
-* **State Management**: LocalStorage (Persist session data without external DB)
-* **Logic**: Regex-based PII (Personally Identifiable Information) Detector
+<br>
 
 ---
 
-## 📱 Responsive Experience
+## 💡 Solution
 
-본 서비스는 다양한 디바이스 환경에서 최적화된 시각적 경험을 제공합니다.
+- 실제 금융감독원 공개 피해 사례 기반 시뮬레이션
+- LLM 기반 적응형 대화 구조
+- 룰 기반 판단 엔진을 통한 행동 분석
+- 개인별 취약 트리거 진단 리포트 제공
 
-* **Mobile**: 실제 메신저 앱을 사용하는 듯한 긴박감 있는 채팅 환경 제공.
-* **Desktop**: 관리자 설정, 실시간 감지 로그, 상세 리포트를 한눈에 파악할 수 있는 대시보드 구조.
-
----
-
-## 🚀 Quick Start (Development)
-
-### 1. 환경 변수 설정
-
-`.env.local` 파일을 생성하고 OpenAI API Key를 입력합니다.
-
-```env
-OPENAI_API_KEY=your_openai_api_key_here
-
-```
-
-### 2. 의존성 설치 및 실행
-
-```bash
-npm install
-npm run dev
-
-```
-
-### 3. 시뮬레이션 시작
-
-1. `/admin` 페이지 접속: 실제 사례(Mock)를 분석하여 시나리오를 설정합니다.
-2. `/simulate` 페이지 이동: AI 가해자와의 대화를 진행합니다.
-3. `/report/[sessionId]` 확인: 대화 종료 후 생성된 진단 리포트를 분석합니다.
+<br>
 
 ---
 
-## 📈 Roadmap
+## 🧠 System View
 
-* [x] LLM 기반 가변형 피싱 대화 엔진 구축
-* [x] 실시간 개인정보 노출 감지 로직 구현
-* [x] 방사형 취약점 진단 차트 시스템
-* [ ] 실제 범죄 녹취 기반 Voice-to-Voice 시뮬레이션 (지원 예정)
-* [ ] 금융기관 이상거래 탐지 시스템(FDS) 연동 API 개발 (지원 예정)
+![System Architecture](demo/System%20View.png)
+
+<br>
 
 ---
 
-**Phishing Insight**는 기술로 사람을 보호하고, 더 안전한 디지털 금융 세상을 만듭니다.
+## 👥 User Flow
+
+<table>
+  <tr>
+    <th align="center">🔹 일반 사용자</th>
+    <th align="center">🔹 관리자</th>
+  </tr>
+  <tr>
+    <td>
+      1. 시뮬레이션 참여<br/>
+      2. 자유 대화 진행<br/>
+      3. 위험 행동 발생<br/>
+      4. 진단 리포트 확인
+    </td>
+    <td>
+      1. 사례 데이터 업로드<br/>
+      2. 카테고라이징 및 룰 정의<br/>
+      3. 시나리오 반영<br/>
+      4. 운영 모니터링
+    </td>
+  </tr>
+</table>
+
+
+<br>
 
 ---
+
+## 🎥 Demo
+
+<table>
+  <tr>
+    <td align="center">
+      <b>사용자 시뮬레이션 화면</b><br/>
+      <img src="demo/1.gif" width="450"/>
+    </td>
+    <td align="center">
+      <b>관리자 화면</b><br/>
+      <img src="demo/2.gif" width="450"/>
+    </td>
+  </tr>
+</table>
+
+
+- 전체 데모 영상:  👉 [유튜브 바로가기](https://youtu.be/GVYhEuwNFKo?si=2JQ7XJ3UanHRDqNZ)
+
+<br>
+
+---
+
+## ⚙️ Tech Stack (MVP 기준)
+
+- **Frontend**: Next.js
+- **LLM API**: 시뮬레이션 대화 생성 및 로그 요약
+- **RAG 구조**: 사례 카테고라이징 기반 데이터 조회
+- **Rule Engine**: 위험 판단 및 종료 조건 처리
+
+> AI 의존도를 최소화하고 통제 가능한 구조로 설계되었습니다.
+
+<br>
+
+---
+
+## 🚀 Future Expansion
+
+- 음성 기반 통화 시뮬레이션 (멀티모달 확장)
+- 금융 앱 연계 사전 위험 진단 API
+- 고위험군 맞춤 시나리오 제공
+- 누적 데이터 기반 취약 패턴 고도화
+
+
+<br>
+
+---
+
+## 📎 Project Purpose
+
+SAFECHOICE는 단순히 피싱을 “알려주는” 서비스가 아니라,  
+**피싱을 직접 경험하게 만들어 행동을 바꾸는 예방 플랫폼**을 목표로 합니다.
